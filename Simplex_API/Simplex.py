@@ -53,32 +53,32 @@ class MetodoSimplex:
 
     #En el siguiente codigo se intenta obtener sim
 
-    #Añadir variables basicas
+    #Añadir variables no basicas
     for i in range(len(restricciones[0])):
         sim.append('x'+str((i+1)))
     
     #Añadir variables artificiales y de holgura
-    no_bas = []
+    bas = []
     a_ind = 0
     h_ind = 0
 
     for item in tipos_restriccion:
         if item == '=':
             a_ind = a_ind + 1
-            no_bas.append('a'+str(a_ind))         
+            bas.append('a'+str(a_ind))         
         elif item == '<=':
             h_ind = h_ind + 1
-            no_bas.append('h'+str(h_ind))       
+            bas.append('h'+str(h_ind))       
         elif item == '>=':
             a_ind = a_ind + 1
             h_ind = h_ind + 1
-            no_bas.append('a'+str(a_ind))           
-            no_bas.append('h'+str(h_ind))
+            bas.append('a'+str(a_ind))           
+            bas.append('h'+str(h_ind))
             
 
-    no_bas.sort()
+    bas.sort()
 
-    sim.extend(no_bas)
+    sim.extend(bas)
 
     #En el siguiente codigo se intenta obtener K 
     curr_ind_a = len(restricciones[1])
@@ -118,20 +118,60 @@ class MetodoSimplex:
       K.append(rest)
 
     print("sim:",sim)
-    print("K:",K)
+    #print("K:",K)
 
     #Sacar la ultima fila de K
-    z = func_obj
+    z = [str(item) for item in func_obj] 
 
     for i in range(a_ind):
-      z.append("Ma"+str(i+1))
+      z.append("M")
     
-    print(z)
+    for i in range(h_ind):
+       z.append(str(0))
 
+    #print(z)
 
+    simbolos = sp.symbols((*sim,'M'))
+
+    dict_sim = {str(simbolo) : simbolo for simbolo in simbolos}
+
+    #print(simbolos)
+
+    #Obtener fila de la función objetivo con las variables artificiales multiplicadas por M agregadas e igualada a 0
+    z = [-1*eval(item, dict_sim) for item in z]
+    z.append(0)
+    #print(z)
+
+    
+    #Eliminar las variables artificiales
+    cont_a = a_ind
+    for restriccion in K:
+      if restriccion[len(func_obj)+a_ind-cont_a] != 0 and cont_a > 0:
+        z = [z[i] + (-z[len(func_obj)+a_ind-cont_a]/restriccion[len(func_obj)+a_ind-cont_a])*restriccion[i] for i in range(len(z))]
+        cont_a = cont_a - 1
+
+    #print(z)
+
+    #Se completa la matriz K
+    K.append(z)
+
+    print("K:",K)
+
+    #Hallar H
+    h_compl = set()
+    for num, item in enumerate(sim):
+      if z[num] != 0:
+         h_compl.add(item)
+
+    H = list(set(sim)-h_compl)
+    
+    H.sort()
+    print("H:",H)
+
+    return K, sim, H
 
     """
-    sim = [x1,x2,a1,a2,h1,h2]
+    sim = ['x1','x2','a1','a2','h1','h2']
     H=['a1','a2','h2']
     M=1e2
     K=[[3,1,1,0,0,0,3],
