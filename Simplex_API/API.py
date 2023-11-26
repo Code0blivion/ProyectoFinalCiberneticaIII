@@ -17,7 +17,9 @@ def simplex_api():
 
     solver = MetodoSimplex()
     
-    print(func_obj, restricciones, igualdades, tipos_restriccion)
+    #print(func_obj, restricciones, igualdades, tipos_restriccion)
+
+    solver.inicializarProblema(func_obj, restricciones, igualdades, tipos_restriccion)
 
     return jsonify("Done")
 

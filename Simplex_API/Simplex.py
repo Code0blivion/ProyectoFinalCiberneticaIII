@@ -58,30 +58,75 @@ class MetodoSimplex:
         sim.append('x'+str((i+1)))
     
     #Añadir variables artificiales y de holgura
-    a_ind = 1
-    h_ind = 1
+    no_bas = []
+    a_ind = 0
+    h_ind = 0
 
     for item in tipos_restriccion:
         if item == '=':
-            sim.append('a'+str(a_ind))
             a_ind = a_ind + 1
+            no_bas.append('a'+str(a_ind))         
         elif item == '<=':
-            sim.append('h'+str(h_ind))
             h_ind = h_ind + 1
+            no_bas.append('h'+str(h_ind))       
         elif item == '>=':
-            sim.append('a'+str(a_ind))
             a_ind = a_ind + 1
-            sim.append('h'+str(h_ind))
             h_ind = h_ind + 1
+            no_bas.append('a'+str(a_ind))           
+            no_bas.append('h'+str(h_ind))
+            
+
+    no_bas.sort()
+
+    sim.extend(no_bas)
 
     #En el siguiente codigo se intenta obtener K 
-    curr_ind = len(restricciones[1])
+    curr_ind_a = len(restricciones[1])
+    curr_ind_h = len(restricciones[1]) + a_ind
     for i,restriccion in enumerate(restricciones):
-       rest = restriccion
-       for j in range(len(sim)-len(rest)):
-          if tipos_restriccion[i] == '=':
+      rest = restriccion
+      flag_a = False
+      flag_h = False
+      for j in range(len(sim)-len(rest)):
+        if tipos_restriccion[i] == '=': 
+          if len(rest) == curr_ind_a and not flag_a:
             rest.append(1)
-            #FPendiente
+            curr_ind_a = len(rest)
+            flag_a = True
+          else:
+            rest.append(0)
+        elif tipos_restriccion[i] == '<=':
+            if len(rest) == curr_ind_h and not flag_h:
+              rest.append(1)
+              curr_ind_h = len(rest)
+              flag_h = True
+            else:
+              rest.append(0)
+        elif tipos_restriccion[i] == '>=':
+          if len(rest) == curr_ind_a and not flag_a:
+            rest.append(1)
+            curr_ind_a = len(rest)
+            flag_a = True
+          elif len(rest) == curr_ind_h and not flag_h:
+              rest.append(-1)
+              curr_ind_h = len(rest)
+              flag_h = True
+          else:
+            rest.append(0)
+      
+      rest.append(igualdades[i])
+      K.append(rest)
+
+    print("sim:",sim)
+    print("K:",K)
+
+    #Sacar la ultima fila de K
+    z = func_obj
+
+    for i in range(a_ind):
+      z.append("Ma"+str(i+1))
+    
+    print(z)
 
 
 
