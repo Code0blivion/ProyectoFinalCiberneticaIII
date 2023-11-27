@@ -19,9 +19,19 @@ def simplex_api():
     
     #print(func_obj, restricciones, igualdades, tipos_restriccion)
 
-    solver.inicializarProblema(func_obj, restricciones, igualdades, tipos_restriccion)
+    M, sim, H = solver.inicializarProblema(func_obj, restricciones, igualdades, tipos_restriccion)
 
-    return jsonify("Done")
+    M_h, resultados=solver.solve(M,sim,H)
+
+    print("M_r: ", M_h)
+    print("resutlados: ",resultados)
+
+    return jsonify({
+                    'matrices': M_h,
+                    'resultados': resultados,
+                    'cabecera': sim ,
+                    'lateral': H
+                    })
 
 
 if __name__ == '__main__':

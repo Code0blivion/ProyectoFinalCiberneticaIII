@@ -8,10 +8,11 @@ class MetodoSimplex:
   def mulfila(self, a,b):
     return sp.Matrix([a[i]*b[i] for i in range(len(a))])
   
-  def solve(self,M,sim,H):
+  def solve(self,M,sim,H, resultado=None):
 
     #Lista donde se almacenan las matrices temporales y el resultado
-    resultado = [] 
+    if resultado==None:
+      resultado = [[list(i) for i in np.block([np.array([H+['~']],dtype='str').T,np.array(M,dtype='str')])]]
 
     M=sp.Matrix(M)
     #Selecciona el pivote
@@ -27,19 +28,19 @@ class MetodoSimplex:
         M[i,:]=M[i,:]*M[vs,ve]-M[vs,:]*M[i,ve]
 
     #Guarda la matriz temporal en la lista de resultados
-    resultado.append(M)
+    resultado.append([list(i) for i in np.block([np.array([H+['~']],dtype='str').T,np.array(M,dtype='str')])])
   
     #Verifica si hay numeros positivos en la ultima fila exceptuando el resultado en p
     if len(np.array((M.subs(sp.symbols('M'),1e4))[-1,:-1],dtype="float64")[np.array((M.subs(sp.symbols('M'),1e4))[-1,:-1],dtype="float64")>0])>0:
       #Si hay positivos mayores a cero llama a la funcion pero con la nueva matriz
-      return self.solve(M,sim,H)
+      return self.solve(M,sim,H,resultado)
     #a grega a H un valor resultado para devolver un diccionario con los valores
     H.append("Resultado")
     M[-1,-1]=abs(M[-1,-1])
     #Guardar los resultados finales en la lista de resultados
-    resultado.append({H[i]: M[i,-1] for i in range(len(H))}) 
-    print(resultado[-1])
-    return resultado
+    #resultado.append({H[i]: M[i,-1] for i in range(len(H))}) 
+    #print(resultado[-1])
+    return resultado, {H[i]: str(M[i,-1]) for i in range(len(H))}
   
 
   #Devuelve la información que necesita el metodo simplex base
@@ -167,7 +168,6 @@ class MetodoSimplex:
     
     H.sort()
     print("H:",H)
-
     return K, sim, H
 
     """

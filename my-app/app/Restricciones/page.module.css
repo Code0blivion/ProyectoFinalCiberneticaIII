@@ -1,0 +1,32 @@
+.resultadosmatrices{
+    margin:auto;
+}
+
+.resultadosmatrices div table{
+    margin:20px auto;
+    background-color: white;
+    color:black;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.resultadosmatrices div table tr td{
+    margin:0;
+    width:100px;
+    text-align: center;
+}
+
+.resultadosmatrices div table tr th{
+    background-color: aquamarine;
+    margin:0;
+    width:100px;
+    user-select: none;
+}
+
+
+.resultadosmatrices div table tr th:hover{
+    background-color:aqua;
+    margin:0;
+    width:100px;
+}

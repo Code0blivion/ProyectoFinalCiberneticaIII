@@ -1,10 +1,14 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
+import styles from './page.module.css'
+import React, { useState, useRef, useEffect} from "react";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const numVariables = parseInt(searchParams.get('numVariables'));
   const numRestricciones = parseInt(searchParams.get('numRestricciones'));
+  const [tabla, setTabla] = useState(<div></div>);
+  const [resultados,setResultados] = useState("")
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +47,31 @@ export default function Page() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+      data['cabecera'].push('R')
+      var cabecera=(
+        <tr>
+        <th scope="row">~</th>
+        {data['cabecera'].map((i)=>(<th>{i}</th>))}
+      </tr>
+      )
+
+      setTabla(<div>
+        {data['matrices'].map((matriz)=>(
+          <table>
+            {cabecera}
+            {matriz.map((fila)=>(
+                <tr>
+                  {<th>{fila.shift()}</th>}
+                  {fila.map(( i )=>(
+                    <td>{i}</td>
+                  )
+                  )}
+                </tr>
+            )
+            )}
+          </table>
+        ))}
+      </div>)
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -83,6 +111,8 @@ export default function Page() {
         ))}
         <button type="submit" className="submit-button">Resolver</button>
       </form>
+      <div className={styles.resultadosmatrices}>{tabla}</div>
+      <div className="Resultados">{resultados}</div>
     </div>
   )
 }
