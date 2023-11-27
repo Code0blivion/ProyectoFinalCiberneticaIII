@@ -96,7 +96,7 @@ export default function Page() {
           <span>Z = </span>
           {Array.from({ length: numVariables }).map((_, i) => (
             <div key={i} className="label-container">
-              <input type="number" id={`input-z-${i}`} name={`z-${i}`} className="input-number" />
+              <input type="number" step="any" id={`input-z-${i}`} name={`z-${i}`} className="input-number" />
               <span>X<sub>{i + 1}</sub></span>
             </div>
           ))}
@@ -105,7 +105,7 @@ export default function Page() {
           <div key={i} className="flex-row">
             {Array.from({ length: numVariables }).map((_, j) => (
               <div key={j} className="label-container">
-                <input type="number" id={`input-${i}-${j}`} name={`x-${i}-${j}`} className="input-number" />
+                <input type="number" step="any" id={`input-${i}-${j}`} name={`x-${i}-${j}`} className="input-number" />
                 <span>X<sub>{j + 1}</sub></span>
               </div>
             ))}
