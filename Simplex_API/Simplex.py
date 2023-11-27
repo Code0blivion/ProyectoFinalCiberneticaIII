@@ -143,13 +143,14 @@ class MetodoSimplex:
     z.append(0)
     #print(z)
 
-    
-    #Eliminar las variables artificiales
-    cont_a = a_ind
-    for restriccion in K:
-      if restriccion[len(func_obj)+a_ind-cont_a] != 0 and cont_a > 0:
-        z = [z[i] + (-z[len(func_obj)+a_ind-cont_a]/restriccion[len(func_obj)+a_ind-cont_a])*restriccion[i] for i in range(len(z))]
-        cont_a = cont_a - 1
+    #Verificar que haya variables artificiales
+    if a_ind > 0:
+      #Eliminar las variables artificiales
+      cont_a = a_ind
+      for restriccion in K:
+        if restriccion[len(func_obj)+a_ind-cont_a] != 0 and cont_a > 0:
+          z = [z[i] + (-z[len(func_obj)+a_ind-cont_a]/restriccion[len(func_obj)+a_ind-cont_a])*restriccion[i] for i in range(len(z))]
+          cont_a = cont_a - 1
 
     #print(z)
 
