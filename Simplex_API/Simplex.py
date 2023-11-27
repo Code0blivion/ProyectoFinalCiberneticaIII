@@ -17,7 +17,7 @@ class MetodoSimplex:
     M=sp.Matrix(M)
     #Selecciona el pivote
     ve=np.argmax((M.subs(sp.symbols('M'),1e4))[-1,:-1])
-    vs=np.argmin([(i if i>0 else np.inf) for i in np.array(M[:-1,-1],dtype='float64')/np.array(M[:-1,ve],dtype='float64')])
+    vs=np.argmin([(i if i>0 else np.array([np.inf])) for i in np.array(M[:-1,-1],dtype='float64')/np.array(M[:-1,ve],dtype='float64')])
     #Hace el remplazo de la variable
     H[vs]=sim[ve]
     M[vs,:]=M[vs,:]/M[vs,ve]
