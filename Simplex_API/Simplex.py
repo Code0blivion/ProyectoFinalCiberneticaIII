@@ -17,7 +17,7 @@ class MetodoSimplex:
     M=sp.Matrix(M)
     #Selecciona el pivote
     ve=np.argmax((M.subs(sp.symbols('M'),1e4))[-1,:-1])
-    vs=np.argmin([(i if i>0 else np.inf) for i in self.dividirfila(M[:-1,-1],M[:-1,ve])])
+    vs=np.argmin([(i if i>0 else np.inf) for i in np.array(M[:-1,-1],dtype='float64')/np.array(M[:-1,ve],dtype='float64')])
     #Hace el remplazo de la variable
     H[vs]=sim[ve]
     M[vs,:]=M[vs,:]/M[vs,ve]
@@ -40,7 +40,7 @@ class MetodoSimplex:
     #Guardar los resultados finales en la lista de resultados
     #resultado.append({H[i]: M[i,-1] for i in range(len(H))}) 
     #print(resultado[-1])
-    return resultado, {H[i]: str(M[i,-1]) for i in range(len(H))}
+    return resultado, [[H[i],str(M[i,-1])] for i in range(len(H))]
   
 
   #Devuelve la información que necesita el metodo simplex base

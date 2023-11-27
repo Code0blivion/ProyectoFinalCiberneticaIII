@@ -29,4 +29,47 @@
     background-color:aqua;
     margin:0;
     width:100px;
+    transform: scale(1.1);
+}
+
+
+.resultados{
+    background-color: white;
+    width: max-content;
+    margin:20px auto;
+    color:black;
+    font-size: 20pt;
+    padding: 40px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.resultados ol{
+    list-style: none;
+}
+
+.resultados ol li{
+    user-select: none;
+    padding: 10px 20px;
+}
+
+.resultados ol li:hover{
+    background-color: aquamarine;
+    transform: scale(1.1);
+}
+
+.container p{
+    text-align: center;
+    margin: 30px;
+}
+
+.flex_container{
+    margin:auto;
+    width: max-content;
+}
+
+.flex_container button{
+    width: 100%;
+    padding: 5px 0;
+    margin: 10px 0;
 }

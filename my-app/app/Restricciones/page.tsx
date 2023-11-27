@@ -8,7 +8,7 @@ export default function Page() {
   const numVariables = parseInt(searchParams.get('numVariables'));
   const numRestricciones = parseInt(searchParams.get('numRestricciones'));
   const [tabla, setTabla] = useState(<div></div>);
-  const [resultados,setResultados] = useState("")
+  const [resultados,setResultados] = useState(<div></div>)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,7 +37,6 @@ export default function Page() {
       selectValues,
       lastInputValues
     };
-  
     fetch('http://localhost:5000/simplex_api/', {
       method: 'POST',
       headers: {
@@ -72,6 +71,15 @@ export default function Page() {
           </table>
         ))}
       </div>)
+
+      setResultados(
+        <ol>
+          {data['resultados'].map((v)=>(
+            <li>{v[0]} = {v[1]}</li>
+        ))}
+        </ol>
+      )
+
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -79,11 +87,11 @@ export default function Page() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <p>Número de variables: {numVariables}</p>
       <p>Número de restricciones: {numRestricciones}</p>
       <p>Ingresa tu función objetivo y tus restricciones</p>
-      <form onSubmit={handleSubmit} className="flex-container">
+      <form onSubmit={handleSubmit} className={styles.flex_container}>
         <div className="flex-row">
           <span>Z = </span>
           {Array.from({ length: numVariables }).map((_, i) => (
@@ -112,7 +120,7 @@ export default function Page() {
         <button type="submit" className="submit-button">Resolver</button>
       </form>
       <div className={styles.resultadosmatrices}>{tabla}</div>
-      <div className="Resultados">{resultados}</div>
+      <div className={styles.resultados}>{resultados}</div>
     </div>
   )
 }
