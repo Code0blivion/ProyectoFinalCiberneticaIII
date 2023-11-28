@@ -36,7 +36,8 @@ class MetodoSimplex:
       return self.solve(M,sim,H,resultado)
     #a grega a H un valor resultado para devolver un diccionario con los valores
     H.append("Resultado")
-    M[-1,-1]=abs(M[-1,-1])
+    if 'a1' not in sim:
+      M[-1,-1]=-M[-1,-1]
     #Guardar los resultados finales en la lista de resultados
     #resultado.append({H[i]: M[i,-1] for i in range(len(H))}) 
     #print(resultado[-1])
